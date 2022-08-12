@@ -224,6 +224,17 @@ class AftonMenuState extends MusicBeatState
 		}
 		#end
 
+                #if android
+                if (!FlxG.save.data.matpatUnlocked)
+                {
+	                addVirtualPad(FULL, A_B_C);
+                }
+                else
+                {
+	                addVirtualPad(FULL, A_B);
+                }
+                #end
+
 		super.create();
 	}
 
@@ -292,6 +303,31 @@ class AftonMenuState extends MusicBeatState
 				}
 			}
 		}
+
+                #if android
+                if (!FlxG.save.data.matpatUnlocked)
+                {
+                        if (_virtualpad.buttonC.justPressed){
+				FlxG.mouse.visible = false;
+				PlayState.storyPlaylist = ['Just-A-Theory'];
+				PlayState.isStoryMode = false;
+				
+				var diffic = "";
+					
+				PlayState.SONG = Song.loadFromJson('just-a-theory' + diffic, 'just-a-theory');
+				PlayState.storyWeek = 0;
+				PlayState.campaignScore = 0;
+					
+				matpatUnlocked = true;
+
+				FlxG.save.data.matpatUnlocked = matpatUnlocked;
+				FlxG.save.flush();
+
+				LoadingState.loadAndSwitchState(new PlayState());
+				FlxG.sound.music.fadeOut();
+			}              
+                }
+                #end
 		
 		if (!selectedSomethin)
 		{
@@ -356,7 +392,7 @@ class AftonMenuState extends MusicBeatState
 						});
 					});
 				}
-			}
+			}                    
 		}
 
 		if (FlxG.keys.justPressed.ONE || FlxG.keys.justPressed.TWO ||FlxG.keys.justPressed.THREE ||FlxG.keys.justPressed.FOUR ||FlxG.keys.justPressed.FIVE ||FlxG.keys.justPressed.SIX ||FlxG.keys.justPressed.SEVEN ||FlxG.keys.justPressed.EIGHT ||FlxG.keys.justPressed.NINE)
